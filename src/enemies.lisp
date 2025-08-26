@@ -1,14 +1,15 @@
 (in-package :mako)
 
-(ecs:defcomponent enemy)
+(ecs:define-component enemy)
 
 (ecs:defsystem move-enemies
   (:components-rw (tile position)
    :components-ro (enemy)
-   :enable (not *player-turn*)
-   :finally (setf *player-turn* t))
+   :components-no (wait)
+   :enable (not *player-turn*))
   (let ((dx (1- (random 3)))
         (dy (1- (random 3))))
+    (assign-wait entity :remaining-time 20)
     (incf position-x (* dx +tile-size+))
     (incf position-y (* dy +tile-size+))
     (setf tile-row (round/tile position-x)

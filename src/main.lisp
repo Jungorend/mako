@@ -13,10 +13,17 @@
 
 (defun init ()
   (ecs:make-storage)
+  (setf *player-turn* t)
   (ecs:make-object
    `((:player)
      (:position :x 100.0 :y 100.0)
      (:tile :col 3 :row 3)
+     (:image :bitmap ,(load-bitmap "player.png")
+             :width 32.0 :height 32.0)))
+  (ecs:make-object
+   `((:enemy)
+     (:position :x 200.0 :y 200.0)
+     (:tile :col 6 :row 6)
      (:image :bitmap ,(load-bitmap "player.png")
              :width 32.0 :height 32.0))))
 
@@ -35,6 +42,12 @@
 
   (al:draw-text *font* (al:map-rgba 255 255 255 0) 0 0 0
                 (format nil "~d FPS" *fps*))
+  (when (has-wait-p 0)
+    (al:draw-text *font* (al:map-rgba 255 255 255 0) 0 48 0
+                  (format nil "~d" (wait-remaining-time 0))))
+  (when (has-wait-p 1)
+    (al:draw-text *font* (al:map-rgba 255 255 255 0) 0 72 0
+                  (format nil "Enemy wait: ~d" (wait-remaining-time 0))))
   (al:draw-text *font* (al:map-rgba 255 255 255 0) 0 24 0
                 (format nil "~d, ~d" (tile-col 0) (tile-row 0))))
 

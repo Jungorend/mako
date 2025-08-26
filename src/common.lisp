@@ -63,3 +63,14 @@
 (ecs:define-component position
     (x 0.0 :type single-float)
   (y 0.0 :type single-float))
+
+(ecs:define-component wait
+    (remaining-time 10 :type fixnum))
+
+(ecs:define-system advance-game-clock
+    (:components-rw (wait)
+     :enable (or (not *player-turn*)
+                 (not *paused*)))
+  (decf wait-remaining-time 1)
+  (when (= wait-remaining-time 0)
+    (delete-wait entity)))
