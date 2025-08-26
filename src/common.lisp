@@ -49,11 +49,6 @@
 (defvar *player-turn* t)
 (defvar *paused* nil)
 
-(declaim (inline round/tile-size)
-         (ftype (function (single-float) fixnum) round/tile))
-(defun round/tile (x)
-  (round x +tile-size+))
-
 (ecs:define-component tile
     (col 0 :type fixnum)
   (row 0 :type fixnum)
@@ -69,8 +64,8 @@
 
 (ecs:define-system advance-game-clock
     (:components-rw (wait)
-     :enable (or (not *player-turn*)
-                 (not *paused*)))
+     :enable (and (not *player-turn*)
+                  (not *paused*)))
   (decf wait-remaining-time 1)
-  (when (= wait-remaining-time 0)
+  (when (zerop wait-remaining-time)
     (delete-wait entity)))

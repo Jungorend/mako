@@ -25,8 +25,8 @@
 
 (defun make-sprite-object (x y image)
   (ecs:make-object
-   `((:position :x x :y y)
+   `((:position :x ,(* +tile-size+ x) :y ,(* +tile-size+ y))
      (:image :bitmap ,(load-bitmap image)
              :width 32.0 :height 32.0)
-     (:tile :col (round/tile ,x)
-            :row (round/tile ,y)))))
+     (:tile :col ,x
+            :row ,y))))

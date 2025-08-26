@@ -16,6 +16,7 @@
                 :components
                 ((:file "package")
                  (:file "common")
+                 (:file "wall")
                  (:file "map")
                  (:file "sprites")
                  (:file "enemies")
