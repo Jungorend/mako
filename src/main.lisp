@@ -19,13 +19,19 @@
      (:position :x 100.0 :y 100.0)
      (:tile :col 3 :row 3)
      (:image :bitmap ,(load-bitmap "player.png")
-             :width +tile-size+ :height +tile-size+)))
+             :width ,+tile-size+ :height ,+tile-size+)))
+  (ecs:make-object
+   `((:wall)
+     (:position :x 320.0 :y 320.0)
+     (:tile :col 10 :row 10)
+     (:image :bitmap ,(load-bitmap "wall.png")
+             :width ,+tile-size+ :height ,+tile-size+)))
   (ecs:make-object
    `((:enemy)
      (:position :x 200.0 :y 200.0)
      (:tile :col 6 :row 6)
-     (:image :bitmap ,(load-bitmap "player.png")
-             :width +tile-size+ :height +tile-size+))))
+     (:image :bitmap ,(load-bitmap "enemy.png")
+             :width ,+tile-size+ :height ,+tile-size+))))
 
 (declaim (type fixnum *fps*))
 (defvar *fps* 0)

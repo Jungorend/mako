@@ -13,8 +13,11 @@
     (when (key-pressed? 'move-down) (incf dy 1))
     (when (key-pressed? 'move-left) (decf dx 1))
     (when (key-pressed? 'move-right) (incf dx 1))
-    (when (or (not (= dx 0))
-              (not (= dy 0)))
+    (when (and  (or (not (= dx 0))
+                    (not (= dy 0)))
+                (not (entity-at-tile? 'wall
+                                      (+ tile-row dx)
+                                      (+ tile-col dy))))
       (assign-wait entity :remaining-time 10)
       (incf tile-row dx)
       (incf tile-col dy)

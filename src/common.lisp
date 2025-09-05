@@ -34,7 +34,7 @@
 
 (defun get-keyboard-input ()
   (al:with-current-keyboard-state keyboard-state
-    (loop for bind being the hash-key using (hash-value action) of *keyboard-state* do
+    (loop for bind being the hash-key of *keyboard-state* using (hash-value action) do
       (if (al:key-down keyboard-state (binding action))
           (if (down? action)
               (when (pressed? action)
@@ -69,3 +69,8 @@
   (decf wait-remaining-time 1)
   (when (zerop wait-remaining-time)
     (delete-wait entity)))
+
+(defun entity-at-tile? (entity-type x y)
+  (some (alexandria:symbolicate
+         "HAS-" (symbol-name entity-type) "-P")
+        (tiles (a*:encode-integer-coordinates x y))))
