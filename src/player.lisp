@@ -1,4 +1,4 @@
-(in-package :mako)
+(in-package #:mako)
 
 (ecs:define-component player)
 

@@ -2,7 +2,7 @@
 
 (ecs:define-component wall)
 
-(defun create-wall (x y &key (image "steel-wall.png"))
+(defun create-wall (x y &key (image "wall.png"))
   (ecs:make-object
    `((:wall)
      (:position :x ,(* x +tile-size+) :y ,(* y +tile-size+))

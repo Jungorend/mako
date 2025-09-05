@@ -71,6 +71,7 @@
     (delete-wait entity)))
 
 (defun entity-at-tile? (entity-type x y)
-  (some (alexandria:symbolicate
-         "HAS-" (symbol-name entity-type) "-P")
+  (some (intern
+         (concatenate 'string "HAS-" (symbol-name entity-type) "-P")
+         'mako)
         (tiles (a*:encode-integer-coordinates x y))))
