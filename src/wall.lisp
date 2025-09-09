@@ -2,10 +2,10 @@
 
 (ecs:define-component wall)
 
-(defun create-wall (x y &key (image "wall.png"))
+(defun spawn-wall (x y &key (image "wall.png"))
   (ecs:make-object
    `((:wall)
      (:position :x ,(* x +tile-size+) :y ,(* y +tile-size+))
-     (:tile :col ,y :row ,x)
+     (:tile :col ,x :row ,y)
      (:image :bitmap ,(load-bitmap image)
              :width +tile-size+ :height +tile-size+))))

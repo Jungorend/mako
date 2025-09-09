@@ -8,6 +8,28 @@
 (define-constant +font-size+ 24)
 (define-constant +config-path+ "../config.cfg" :test #'string=)
 
+(declaim (type boolean *player-turn* *paused*))
+(defvar *player-turn* t)
+(defvar *paused* nil)
+
+(ecs:define-component tile
+    (col 0 :type fixnum)
+  (row 0 :type fixnum)
+  (hash (a*:encode-integer-coordinates col row)
+        :type fixnum :index tiles))
+
+(ecs:define-component position
+    (x 0.0 :type single-float)
+  (y 0.0 :type single-float))
+
+(ecs:define-component wait
+    (remaining-time 10 :type fixnum))
+
+(ecs:define-component stats
+  (current-health 3 :type fixnum)
+  (max-health 3 :type fixnum)
+  (strength 1 :type fixnum))
+
 (defclass action-state ()
   ((binding :reader binding :initarg :binding)
    (pressed? :accessor pressed? :initform nil :type boolean)
@@ -45,23 +67,6 @@
             (setf (pressed? action) nil
                   (down? action) nil))))))
 
-(declaim (type boolean *player-turn* *paused*))
-(defvar *player-turn* t)
-(defvar *paused* nil)
-
-(ecs:define-component tile
-    (col 0 :type fixnum)
-  (row 0 :type fixnum)
-  (hash (a*:encode-integer-coordinates col row)
-        :type fixnum :index tiles))
-
-(ecs:define-component position
-    (x 0.0 :type single-float)
-  (y 0.0 :type single-float))
-
-(ecs:define-component wait
-    (remaining-time 10 :type fixnum))
-
 (ecs:define-system advance-game-clock
     (:components-rw (wait)
      :enable (and (not *player-turn*)
@@ -71,7 +76,6 @@
     (delete-wait entity)))
 
 (defun entity-at-tile? (entity-type x y)
-  (some (intern
-         (concatenate 'string "HAS-" (symbol-name entity-type) "-P")
-         'mako)
-        (tiles (a*:encode-integer-coordinates x y))))
+  (remove-if-not
+   (intern (concatenate 'string "HAS-" (symbol-name entity-type) "-P") 'mako)
+   (tiles (a*:encode-integer-coordinates x y))))
