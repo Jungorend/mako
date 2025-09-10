@@ -17,6 +17,7 @@
   (ecs:make-object
    `((:player)
      (:position :x 100.0 :y 100.0)
+     (:stats)
      (:tile :col 3 :row 3)
      (:image :bitmap ,(load-bitmap "player.png")
              :width ,+tile-size+ :height ,+tile-size+)))
@@ -29,6 +30,7 @@
   (ecs:make-object
    `((:enemy)
      (:position :x 200.0 :y 200.0)
+     (:stats)
      (:tile :col 6 :row 6)
      (:image :bitmap ,(load-bitmap "enemy.png")
              :width ,+tile-size+ :height ,+tile-size+))))

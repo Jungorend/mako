@@ -24,9 +24,9 @@
          (ecs:delete-entity (first (entity-at-tile? 'enemy target-x target-y))))
         (t
          (assign-wait entity :remaining-time 10)
-         (incf tile-row dx)
-         (incf tile-col dy)
+         (incf tile-row dy)
+         (incf tile-col dx)
          (setf tile-hash (a*:encode-integer-coordinates tile-col tile-row)
-               position-x (* tile-row +tile-size+)
-               position-y (* tile-col +tile-size+))
+               position-x (* tile-col +tile-size+)
+               position-y (* tile-row +tile-size+))
          (setf *player-turn* nil))))))

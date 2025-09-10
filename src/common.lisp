@@ -12,6 +12,9 @@
 (defvar *player-turn* t)
 (defvar *paused* nil)
 
+(ecs:define-component parent
+  (entity -1 :type ecs:entity :index children))
+
 (ecs:define-component tile
     (col 0 :type fixnum)
   (row 0 :type fixnum)
@@ -79,3 +82,8 @@
   (remove-if-not
    (intern (concatenate 'string "HAS-" (symbol-name entity-type) "-P") 'mako)
    (tiles (a*:encode-integer-coordinates x y))))
+
+(ecs:hook-up ecs:*entity-deleting-hook*
+             (lambda (entity)
+               (dolist (child (children entity))
+                 (ecs:delete-entity child))))
