@@ -5,6 +5,8 @@
 (defvar *resources-path*
   (asdf:system-relative-pathname :mako #P"Resources/"))
 
+(defvar *should-quit* nil)
+
 (deploy:define-hook (:boot set-resources-path) ()
   (setf *resources-path*
         (merge-pathnames #P"Resources/"
@@ -47,14 +49,6 @@
 (defvar *font*)
 
 (defun render ()
-  (if (has-wait-p 0)
-      (al:draw-text *font* (al:map-rgba 255 255 255 0) 0 48 0
-                    (format nil "Player Wait: ~d" (wait-remaining-time 0)))
-      (al:draw-text *font* (al:map-rgba 255 255 255 0) 0 48 0
-                    (format nil "Player Wait: 0")))
-  (when (has-wait-p 1)
-    (al:draw-text *font* (al:map-rgba 255 255 255 0) 0 72 0
-                  (format nil "Enemy wait: ~d" (wait-remaining-time 1))))
   (al:draw-text *font* (al:map-rgba 255 255 255 0) 0 24 0
                 (format nil "Position: ~d, ~d" (tile-col 0) (tile-row 0))))
 
@@ -118,12 +112,14 @@
                :with ticks :of-type double-float := (al:get-time)
                :with last-repl-update :of-type double-float := ticks
                :with dt :of-type double-float := 0d0
+               :with *should-quit* := nil
                :while (loop
                         :named event-loop
                         :while (al:get-next-event event-queue event)
                         :for type := (cffi:foreign-slot-value
                                       event '(:union al:event) 'al::type)
-                        :always (not (eq type :display-close)))
+                        :always (not (eq type :display-close))
+                        :never *should-quit*)
                :do (let ((new-ticks (al:get-time)))
                      (setf dt (- new-ticks ticks)
                            ticks new-ticks))
